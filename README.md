@@ -16,9 +16,8 @@ endpoint: Microsoft Identity Platform
 
 ## Scenario
 
-This sample shows how to build a NodeJS Express Web app that uses [MSAL-Node](https://www.npmjs.com/package/@azure/msal-node) to implement OpenID Connect to sign in users in **Azure AD B2C** using the embedded sign-in experience. It assumes you have some familiarity with **Azure AD B2C**. If you'd like to learn all that B2C has to offer, start with our documentation at [https://aka.ms/aadb2c](https://aka.ms/aadb2c).
+This sample shows how to build a NodeJS Express Web app that uses [MSAL-Node](https://www.npmjs.com/package/@azure/msal-node) to implement OpenID Connect to sign in users in **Azure AD B2C**. It assumes you have some familiarity with **Azure AD B2C**. If you'd like to learn all that B2C has to offer, start with our documentation at [https://aka.ms/aadb2c](https://aka.ms/aadb2c).
 
-Try out the working sample: [B2C-MSAL App](https://app3.thegamesstore.in/)
 
 This sample demonstrates a [confidential client application](../../../lib/msal-node/docs/initialize-confidential-client-application.md) registered on Azure AD B2C. It uses:
 
@@ -128,11 +127,6 @@ Your web application registration should include the following information:
 4. Find the instances of `yourcustomdomain.com` and replace the value with your Azure AD B2C domain name. For example, `constoso.com`
 5. Find the assignment for `ENTER_CLIENT_ID` and replace the value with the Application ID from Step 4.
 
->Note: You may find a JavaScript error `Blocked autofocusing on a <input> element in a cross-origin subframe.` in your browser's console. This is because the default behavior of the sign-in experience attempts to focus the user input on the first available user input in the sign-in page, which is not allowed inside an iframe for security reasons. You may want to attempt to override this behavior in your custom UI.
-
-```error
-Blocked autofocusing on a <input> element in a cross-origin subframe.
-```
 
 ### Step 9: Run the sample
 
@@ -140,65 +134,7 @@ Blocked autofocusing on a <input> element in a cross-origin subframe.
 1. You can also upload this sample as an App Service and configure the App Service to use HTTPS.
 1. If you don't have an account registered on the **Azure AD B2C** used in this sample, follow the sign up process. Otherwise, input the email and password for your account and click on **Sign in**.
 
-## Notes about the code
 
-### Defining the Login Modal Dialog
-
-In **index.ejs**, note the modal dialog definition:
-
-```html
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="loginModalLabel"><img src="/images/CloudLogo.gif" width="50" height="50" > B2C Login</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div id="frameWrap">
-        <img id="loader1" src="/images/spinner.gif" width="100" height="100" alt="loading gif" />
-      </div>
-      <iframe id="loginFrame" frameborder="0" src="about:blank" data-isloaded="0" ></iframe> 
-    </div>
-  </div>
-</div>
-```
-
-### Showing the Login Modal Dialog
-
-We need to show the modal dialog which contains the iframe when the sign-in button is clicked. We do not need to worry about closing it when the login, is complete, this will be handled when we reload the entire page post-login in the next step.
-
-```html
-<!-- Shows the loginModal when the SignIn/SignUp button is clicked-->
-    <script>
-        $("#signIn").on("click", function () {
-            $("#loginModal").modal("show");
-            $('#loginFrame').on('load', function () {
-                $('#loader1').hide();
-            });
-            $('#loginFrame').attr('src', '/login');
-        });
-    </script>
-```
-
-### Javascript required for post-login redirect
-
-Because all the login experience and redirects happen inside the iframe, we need to identify when the user journey is completed, and the user is directed back to our application. We track the **document.referrer** value. If we're coming back form our login domain, we know the user journey is compelted, and we can reload the main window (not the iframe) so it reflects the logged-in user's details.
-
-```html
-<!-- Because the authorization flow happens inside the iframe, we need to reload the main page.-->
-  <script>
-    var iframe = document.getElementById('loginFrame');
-    iframe.onload = function() {
-      var iframeBody = this.contentDocument.body;
-      if(iframeBody) {
-        window.top.location.reload();
-      }
-    }
-  </script>
-```
 
 >Note: There are other alternatives here which we can do to accomplish the same logic, one being creating your own SignIn action which includes generating your own sign-in challenge and using the *state* parameter of the sign-in request using OpenIdConnect Events to indicate the redirect url. However, for the purposes of demo, this JavaScript snippet will do.
 

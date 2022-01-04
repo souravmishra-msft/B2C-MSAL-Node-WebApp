@@ -1,12 +1,14 @@
+## README in progress. Do not follow the steps mentioned below.
 ---
 services: azure-active-directory-B2C
 platforms: nodejs
 author: soumi
 level: 200
+sdk: MSAL-Node
 client: NodeJs WebApp
 endpoint: Microsoft Identity Platform
 ---
-# A NodeJS WebApp signing-in users with the Microsoft Identity Platform in Azure AD B2C using the Embedded sign-in experience using iframe
+# A NodeJS WebApp signing-in users with the Microsoft Identity Platform in Azure AD B2C.
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/ASP.NET%20Core%20Web%20App%20tutorial)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=819)
 
@@ -38,13 +40,13 @@ This sample demonstrates a [confidential client application](../../../lib/msal-n
 From your shell or command line:
 
 ```powershell
-git clone https://github.com/souravmishra-msft/B2CEmbeddedSigninMSAL.git
+git clone https://github.com/souravmishra-msft/B2C-MSAL-Node-WebApp.git
 ```
 
-Navigate to the `"B2CEmbeddedSigninMSAL-main"` folder
+Navigate to the `"B2C-MSAL-Node-WebApp-main"` folder
 
  ```Sh
-  cd "B2CEmbeddedSigninMSAL-main"
+  cd "B2C-MSAL-Node-WebApp-main"
   ```
 
 ### Step 2: Download node.js for your platform
@@ -62,40 +64,7 @@ From your shell or command line:
 
 If you don't have an Azure AD B2C tenant yet, you'll need to create an Azure AD B2C tenant by following the [Tutorial: Create an Azure Active Directory B2C tenant](https://azure.microsoft.com/documentation/articles/active-directory-b2c-get-started).
 
-### Step 5: Enable custom domains for Azure Active Directory B2C
-
-To use Azure AD B2C Embedded sign-in, you need to first enable a custom domain with your Azure AD B2C account, and configure it with a custom domain which is on the same domain as your published application, i.e. **Same Origin**. This is required because Azure AD B2C should not allow you to load the sign-in experience in an iframe unless you enable CORS for the source domains loading the iframe using a custom policy. So first, enable a custom domain similar to **login.yourcustomdomain.com** if your application is published on something similar to **www.yourcustomdomain.com**. 
-To read more on enabling custom domains for B2C please check [Tutorial: Enable custom domains for Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-domain?pivots=b2c-custom-policy).
-
->Note: This will effectively disallow you from using sign-in if the application is run from a development machine. To get around that, you may want to create a separate Azure AD Tenant for development, with a development version of the custom policy which has CORS enabled for **<https://localhost:XXXX>**. Also note that this may result in an undesirable user experience Because Azure AD B2C session cookies within an iframe are considered third-party cookies, certain browsers (for example Safari or Chrome in incognito mode) either block or clear these cookies. This should never be done in your production Azure AD B2C tenant.
-
-### Step 6: Create your SignUp/SignIn, Password Reset, and Profile Edit policies (custom policy)
-
-This sample depends on a custom sign-up/sign-in policy. This is because you need to customize the policy to allow **JourneyFraming**, where you allow the user journey to be loaded into an iframe.
-You can use one of the policies in the [Azure AD B2C Custom Policy Starter Pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack). Follow the [Tutorial: Create user flows in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows?pivots=b2c-custom-policy) to deploy such policy.
-
-In your policy, aside from the normal steps in customizing the policy, make sure to add the following in **SignUpOrSignIn.xml**, **PasswordReset.xml**, and **ProfileEdit.xml**, inside the `<RelyingParty>` tag, right after the `<DefaultUserJourney>` tag.
-
-```xml
-<!--
-<RelyingParty>
-  <DefaultUserJourney ReferenceId="SignUpOrSignIn" /> -->
-  <UserJourneyBehaviors> 
-    <JourneyFraming Enabled="true" Sources="https://yourcustomdomain.com https://www.yourcustomdomain.com" /> 
-  </UserJourneyBehaviors>
-<!--
-</RelyingParty> -->
-```
-
->Note: If you want to allow the custom policies to be used with your development environment, make sure you add **<https://localhost:xxxx>** to the list of sources in the `<JourneyFraming>' tag.
-
-Additionally, make sure the `PublicPolicyUri` element in the `<TrustFrameworkPolicy>` in all policy xml files (including **TrustedFramewordBase.xml** and **TrustedFrameworkExtensions.xml**) is referncing your custom domain, not the instance name. The example below is for **SignUpOrSignin.xml**.
-
-```xml
-PublicPolicyUri="http://login.yourcustomdomain.com/B2C_1A_signup_signin"
-```
-
-### Step 7: Create your own Web app
+### Step 5: Create your own Web app
 
 Now you need to [register your web app in your B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-app-registration#register-a-web-application), so that it has its own Application ID.
 

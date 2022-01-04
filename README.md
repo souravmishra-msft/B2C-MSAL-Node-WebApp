@@ -8,8 +8,6 @@ client: NodeJs WebApp
 endpoint: Microsoft Identity Platform
 ---
 
-## README in progress. Do not follow the steps mentioned below.
-
 # A NodeJS WebApp signing-in users with the Microsoft Identity Platform in Azure AD B2C.
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/ASP.NET%20Core%20Web%20App%20tutorial)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=819)

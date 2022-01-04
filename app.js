@@ -21,9 +21,9 @@ const redirectUri = "http://localhost:5001/redirect";
 /** MSAL Config */
 const confidentialClientConfig = {
     auth: {
-        clientId: "",
+        clientId: process.env.CLIENT_ID,
         authority: policies.authorities.signUpSignIn.authority,
-        clientSecret: "",
+        clientSecret: process.env.CLIENT_SECRET,
         knownAuthorities: [policies.authorityDomain],
     },
     system: {
